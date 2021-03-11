@@ -1,0 +1,46 @@
+﻿  Deck.cpp
+C:\Users\marcisne\source\repos\Euchre\Deck.h(13,10): error C3646: 'name': unknown override specifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(13,14): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\marcisne\source\repos\Euchre\Deck.h(28,15): error C2061: syntax error: identifier 'string'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(29,9): error C3646: 'getName': unknown override specifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(29,16): error C2059: syntax error: '('
+C:\Users\marcisne\source\repos\Euchre\Deck.h(29,18): error C2238: unexpected token(s) preceding ';'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(39,2): error C2065: 'string': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(39,9): error C2146: syntax error: missing ';' before identifier 'myCardNames'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(39,9): error C2065: 'myCardNames': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(47,13): error C2039: 'name': is not a member of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(10): message : see declaration of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(47,20): error C2065: 'myCardNames': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(51,13): error C2039: 'name': is not a member of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(10): message : see declaration of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(51,20): error C2065: 'myCardNames': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(55,13): error C2039: 'name': is not a member of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(10): message : see declaration of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(55,20): error C2065: 'myCardNames': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(59,13): error C2039: 'name': is not a member of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(10): message : see declaration of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(59,20): error C2065: 'myCardNames': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(63,13): error C2039: 'name': is not a member of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(10): message : see declaration of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(63,20): error C2065: 'myCardNames': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(67,13): error C2039: 'name': is not a member of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(10): message : see declaration of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(67,20): error C2065: 'myCardNames': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(119,3): error C2065: 'cout': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(119,46): error C2039: 'name': is not a member of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(10): message : see declaration of 'Deck::Card'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(119,54): error C2065: 'endl': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(138,20): error C2065: 'string': undeclared identifier
+C:\Users\marcisne\source\repos\Euchre\Deck.h(138,27): error C2146: syntax error: missing ')' before identifier 'nme'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(139,1): error C2143: syntax error: missing ';' before '{'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(139,1): error C2447: '{': missing function header (old-style formal list?)
+C:\Users\marcisne\source\repos\Euchre\Deck.h(142,14): error C2039: 'getName': is not a member of 'Deck'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(8): message : see declaration of 'Deck'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(142,21): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\marcisne\source\repos\Euchre\Deck.h(142,21): error C2146: syntax error: missing ';' before identifier 'getName'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(143,1): error C2143: syntax error: missing ';' before '{'
+C:\Users\marcisne\source\repos\Euchre\Deck.h(143,1): error C2447: '{': missing function header (old-style formal list?)
+  Euchre.cpp
+  Generating Code...
+C:\Users\marcisne\source\repos\Euchre\Deck.h(145): error C4716: 'Deck::getName': must return a value
+C:\Users\marcisne\source\repos\Euchre\Deck.h(135): error C4716: 'Deck::getSuit': must return a value
