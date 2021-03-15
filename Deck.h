@@ -2,15 +2,14 @@
 #ifndef EUCHRE_H
 #define EUCHRE_H
 
-#include <string.h>
-using namespace std;
+#include <string>
 
 class Deck
 {
 	struct Card
 	{
 		char suit;
-		string name;
+		std::string name;
 		Card * next;
 	};
 
@@ -25,8 +24,8 @@ public:
 	void setSuit(char st);
 	char getSuit();
 
-	void setName(string nme);
-	string getName();
+	void setName(std::string nme);
+	std::string getName();
 
 	void printDeck();
 };

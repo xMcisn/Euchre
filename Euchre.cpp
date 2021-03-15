@@ -6,9 +6,21 @@
 
 int main()
 {
-	Deck* myEuchreDeck = new Deck();
+	Deck myEuchreDeck;
 
-	myEuchreDeck->printDeck();
+	myEuchreDeck.printDeck();
 
+	myEuchreDeck.shuffle();
+
+	std::cout << "----------------------------------------------NEW DECK----------------------------------------------\n";
+
+	myEuchreDeck.printDeck();
+
+
+	myEuchreDeck.shuffle();
+
+	std::cout << "----------------------------------------------NEW DECK----------------------------------------------\n";
+
+	myEuchreDeck.printDeck();
 	return 0;
 }

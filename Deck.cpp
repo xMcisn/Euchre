@@ -1,18 +1,20 @@
 #include "Deck.h"
 #include <iostream>
 #include <cstddef>
+#include <ctime>
 
 Deck::Deck()
 {
 	head = NULL;
 	tail = NULL;
 	Card* current = head;
-	string myCardNames[6] = { "9", "10", "J", "Q", "K", "A" };
+	std::string myCardNames[6] = { "9", "10", "J", "Q", "K", "A" };
 	deckSize = 0;
 
 	for (int i = 0; i < 24; i++)
 	{
 		Card* newCard = new Card;
+
 		if (i < 4)
 		{
 			newCard->name = myCardNames[0];
@@ -85,32 +87,150 @@ void Deck::printDeck()
 		return;
 	}
 
-	for (int i = 0; cardIter <= tail; i++)
+	for (int i = 0; i < deckSize; i++)
 	{
-		cout << cardIter->suit << " " << cardIter->name << endl;
+		std::cout << cardIter->suit << " " << cardIter->name << std::endl;
+		cardIter = cardIter->next;
 	}
+
+	cardIter = NULL;
+	delete cardIter;
 }
 
 void Deck::shuffle()
 {
-	//
+	Card* cardToMove = head;
+	Card* cardBefore = head;
+	Card* tempHead = head;
+	Card* tempTail = NULL;
+	int tempDeckSize = deckSize;
+	int nodesToMove = 0;
+	int iterator = 1;
+	int newDeckSize = 0;
+
+	srand(unsigned int(time(0)));
+
+	if (head == NULL)
+	{
+		return;
+	}
+
+	while (tempDeckSize > 0)
+	{
+		nodesToMove = rand() % tempDeckSize + 1;
+
+		if (tempDeckSize == 1)
+		{
+			cardToMove = head;
+			tempTail->next = cardToMove;
+			cardToMove->next = NULL;
+			tempTail = cardToMove;
+			head = tempHead;
+			tail = tempTail;
+
+			tempHead = NULL;
+			tempTail = NULL;
+			cardToMove = NULL;
+			cardBefore = NULL;
+			delete tempHead;
+			delete tempTail;
+			delete cardToMove;
+			delete cardBefore;
+			return;
+		}
+		else if(nodesToMove == 1)
+		{
+			cardToMove = head;
+			head = head->next;
+			cardToMove->next = NULL;
+			if (tempDeckSize == deckSize)
+			{
+				tempHead = cardToMove;
+				tempTail = cardToMove;
+			}
+			else
+			{
+				tempTail->next = cardToMove;
+				tempTail = cardToMove;
+			}
+		}
+		else if (nodesToMove == tempDeckSize)
+		{
+			while (iterator < tempDeckSize)
+			{
+				if (iterator == tempDeckSize - 1)
+				{
+					cardBefore = cardToMove;
+				}
+				cardToMove = cardToMove->next;
+				iterator++;
+			}
+
+			cardBefore->next = cardToMove->next;
+			cardToMove->next = NULL;
+			tail = cardBefore;
+
+			if (tempDeckSize == deckSize)
+			{
+				tempHead = cardToMove;
+				tempTail = cardToMove;
+			}
+			else
+			{
+				tempTail->next = cardToMove;
+				tempTail = cardToMove;
+			}
+		}
+		else
+		{
+			while (iterator < nodesToMove)
+			{
+				if (iterator == nodesToMove - 1)
+				{
+					cardBefore = cardToMove;
+				}
+				cardToMove = cardToMove->next;
+				iterator++;
+			}
+
+			cardBefore->next = cardToMove->next;
+			cardToMove->next = NULL;
+
+			if (tempDeckSize == deckSize)
+			{
+				tempHead = cardToMove;
+				tempTail = cardToMove;
+			}
+			else
+			{
+				tempTail->next = cardToMove;
+				tempTail = cardToMove;
+			}
+		}
+
+		tempDeckSize--;
+		newDeckSize++;
+		cardToMove = head;
+		iterator = 1;
+		std::cout << "New Deck size is: " << newDeckSize << std::endl;
+	}
 }
 
 void Deck::setSuit(char st)
 {
-	//
+	
 }
 char Deck::getSuit()
 {
-	//
+	return '-';
 }
 
 
-void Deck::setName(string nme)
+void Deck::setName(std::string nme)
 {
 	//
 }
-string Deck::getName()
+std::string Deck::getName()
 {
-	//
+	return "NULL";
 }
