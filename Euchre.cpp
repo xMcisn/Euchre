@@ -3,24 +3,51 @@
 
 #include <iostream>
 #include "Deck.h"
+#include "Player.h"
+#include "IPC.h"
+
+void displayAllPlayersCards(Player p[4]);
 
 int main()
 {
 	Deck myEuchreDeck;
+	Deck pileDeck;
+	Player players[4];
+	IPC communicator;
+	
+	myEuchreDeck.buildMainDeck();
 
 	myEuchreDeck.printDeck();
 
-	myEuchreDeck.shuffle();
+	for (int i = 0; i < 5; i++)
+	{
+		myEuchreDeck.shuffle();
+		std::cout << "---------------------------------------Post " << i+1 << " shuffle---------------------------------------\n";
+		myEuchreDeck.printDeck();
+	}
 
-	std::cout << "----------------------------------------------NEW DECK----------------------------------------------\n";
-
+	std::cout << "----------Main Deck----------\n";
 	myEuchreDeck.printDeck();
 
+	communicator.passCardsToPlayers(players, &myEuchreDeck);
 
-	myEuchreDeck.shuffle();
+	for (int i = 0; i < 4; i++)
+	{
+		displayAllPlayersCards(players);
+		communicator.playersPlaceCardOnPile(players, &pileDeck);
+	}
 
-	std::cout << "----------------------------------------------NEW DECK----------------------------------------------\n";
+	std::cout << "----------Pile Deck----------\n";
+	pileDeck.printDeck();
 
-	myEuchreDeck.printDeck();
 	return 0;
+}
+
+void displayAllPlayersCards(Player p[4])
+{
+	for (int i = 0; i < 4; i++)
+	{
+		std::cout << "----------Player " << i + 1 << " Deck----------\n";
+		p[i].viewDeck();
+	}
 }

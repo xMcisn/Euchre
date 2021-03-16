@@ -7,9 +7,31 @@ Deck::Deck()
 {
 	head = NULL;
 	tail = NULL;
-	Card* current = head;
-	std::string myCardNames[6] = { "9", "10", "J", "Q", "K", "A" };
 	deckSize = 0;
+}
+
+void Deck::printDeck()
+{
+	Card* cardIter = head;
+
+	if (head == NULL)
+	{
+		return;
+	}
+
+	for (int i = 0; i < deckSize; i++)
+	{
+		std::cout << i+1 << ": " << cardIter->name << " " << cardIter->suit << std::endl;
+		cardIter = cardIter->next;
+	}
+
+	cardIter = NULL;
+	delete cardIter;
+}
+
+void Deck::buildMainDeck()
+{
+	Card* current = head;
 
 	for (int i = 0; i < 24; i++)
 	{
@@ -78,31 +100,12 @@ Deck::Deck()
 	}
 }
 
-void Deck::printDeck()
-{
-	Card* cardIter = head;
-
-	if (head == NULL)
-	{
-		return;
-	}
-
-	for (int i = 0; i < deckSize; i++)
-	{
-		std::cout << cardIter->suit << " " << cardIter->name << std::endl;
-		cardIter = cardIter->next;
-	}
-
-	cardIter = NULL;
-	delete cardIter;
-}
-
 void Deck::shuffle()
 {
 	Card* cardToMove = head;
 	Card* cardBefore = head;
 	Card* tempHead = head;
-	Card* tempTail = NULL;
+	Card* tempTail = head;
 	int tempDeckSize = deckSize;
 	int nodesToMove = 0;
 	int iterator = 1;
@@ -212,25 +215,10 @@ void Deck::shuffle()
 		newDeckSize++;
 		cardToMove = head;
 		iterator = 1;
-		std::cout << "New Deck size is: " << newDeckSize << std::endl;
 	}
 }
 
-void Deck::setSuit(char st)
+int Deck::getDeckSize()
 {
-	
-}
-char Deck::getSuit()
-{
-	return '-';
-}
-
-
-void Deck::setName(std::string nme)
-{
-	//
-}
-std::string Deck::getName()
-{
-	return "NULL";
+	return deckSize;
 }
