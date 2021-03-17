@@ -14,9 +14,29 @@ int main()
 	Deck pileDeck;
 	Player players[4];
 	IPC communicator;
-	
-	myEuchreDeck.buildMainDeck();
+	char trump = '-';
 
+	myEuchreDeck.buildMainDeck();
+	myEuchreDeck.printDeck();
+
+	for (int i = 0; i < 5; i++)
+	{
+		myEuchreDeck.shuffle();
+	}
+
+	communicator.passCardsToPlayers(players, &myEuchreDeck);
+	communicator.displayTopCardInMainDeck(&myEuchreDeck);
+	bool result = communicator.pickUpOrPass(players, &myEuchreDeck);
+	std::cout << result << std::endl;
+	displayAllPlayersCards(players);
+	if (result == 0)
+		trump = communicator.pickASuit(&myEuchreDeck);
+
+	std::cout << "Trump Suit: " << communicator.getTrump() << std::endl;
+
+	std::cout << "----------Main Deck----------\n";
+	myEuchreDeck.printDeck();
+	/*
 	myEuchreDeck.printDeck();
 
 	for (int i = 0; i < 5; i++)
@@ -39,6 +59,7 @@ int main()
 
 	std::cout << "----------Pile Deck----------\n";
 	pileDeck.printDeck();
+	*/
 
 	return 0;
 }

@@ -26,7 +26,13 @@ public:
 	void buildMainDeck(); // should only be used in main when creating the main deck
 	int getDeckSize();
 
-	Card* pop() // function currently for main deck only
+	Card* topOfMainDeck()
+	{
+		Card* temp = head;
+		return temp;
+	}
+
+	Card* pop() // function currently for main deck only, not anymore it is actually works for any deck now
 	{
 		Card* tempHead = head;
 
