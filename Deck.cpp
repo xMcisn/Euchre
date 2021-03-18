@@ -16,6 +16,7 @@ void Deck::printDeck()
 
 	if (head == NULL)
 	{
+		std::cout << "Empty Deck...\n";
 		return;
 	}
 
@@ -115,7 +116,8 @@ void Deck::shuffle()
 
 	if (head == NULL)
 	{
-		return;
+		std::cerr << "Head is NULL, exiting program...\n";
+		exit(0);
 	}
 
 	while (tempDeckSize > 0)
@@ -221,4 +223,51 @@ void Deck::shuffle()
 int Deck::getDeckSize()
 {
 	return deckSize;
+}
+
+int Deck::searchAndDiscard(char st, std::string nme, Deck* mainDeck)
+{
+	Card* cardBefore = head;
+	Card* toRemove = head;
+
+	if (head == NULL)
+	{
+		std::cerr << "Head is NULL, exiting program...\n";
+		exit(0);
+	}
+	else if (head->suit == st && head->name == nme)
+	{
+		head = head->next;
+		toRemove->next = NULL;
+		mainDeck->push(toRemove);
+		deckSize--;
+		return 1;
+	}
+	else
+	{
+		while (toRemove != NULL)
+		{
+			if (toRemove->suit == st && toRemove->name == nme)
+			{
+				mainDeck->push(toRemove);
+				return 1;
+			}
+			else
+			{
+				toRemove = toRemove->next;
+				if (toRemove != NULL)
+				{
+					if (toRemove->suit == st && toRemove->name == nme)
+					{
+						cardBefore = toRemove;
+						cardBefore->next = toRemove->next;
+						toRemove->next = NULL;
+						deckSize--;
+					}
+				}
+			}
+		}
+		std::cout << "Card not found try again...\n";
+		return -1;
+	}
 }

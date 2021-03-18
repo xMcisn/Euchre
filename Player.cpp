@@ -26,3 +26,13 @@ void Player::increaseNumOfCardsInHand()
 {
 	numCardsInHand++;
 }
+
+void Player::setDealerStatus(bool status)
+{
+	dealerStatus = status;
+}
+
+bool Player::getDealerStatus()
+{
+	return dealerStatus;
+}

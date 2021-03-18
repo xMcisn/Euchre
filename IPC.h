@@ -12,14 +12,20 @@ private:
 	char trumpSuit;
 public:
 	IPC();
+	IPC(int dlr);
+
 	void passCardsToPlayers(Player p[4], Deck* mainDeck);
 	void displayTopCardInMainDeck(Deck* mainDeck);
 	bool pickUpOrPass(Player p[4], Deck* mainDeck);
+	void cardToDiscard(Player p[4], Deck* mainDeck);
 	char pickASuit(Deck* mainDeck);
 	void playersPlaceCardOnPile(Player p[4], Deck* pileDeck);
 
 
 	char getTrump();
+	int getCurrentDealer();
+	void setDealer(Player p[4]);
+	void setNextDealerAndUpdatePrevious(Player p[4]);
 };
 
 #endif

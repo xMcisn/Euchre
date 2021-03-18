@@ -13,53 +13,43 @@ int main()
 	Deck myEuchreDeck;
 	Deck pileDeck;
 	Player players[4];
-	IPC communicator;
-	char trump = '-';
+	IPC communicator(1);
 
 	myEuchreDeck.buildMainDeck();
+
+	std::cout << "----------Main Deck----------\n";
 	myEuchreDeck.printDeck();
+	std::cout << "-----------------------------\n";
 
 	for (int i = 0; i < 5; i++)
 	{
 		myEuchreDeck.shuffle();
 	}
 
+	communicator.setDealer(players);
+
 	communicator.passCardsToPlayers(players, &myEuchreDeck);
+	std::cout << "----------Top Card----------\n";
 	communicator.displayTopCardInMainDeck(&myEuchreDeck);
+	std::cout << "----------------------------\n";
+	displayAllPlayersCards(players);
 	bool result = communicator.pickUpOrPass(players, &myEuchreDeck);
+	
 	std::cout << result << std::endl;
 	displayAllPlayersCards(players);
+
 	if (result == 0)
-		trump = communicator.pickASuit(&myEuchreDeck);
+		communicator.pickASuit(&myEuchreDeck);
+	else
+		communicator.cardToDiscard(players, &myEuchreDeck);
 
 	std::cout << "Trump Suit: " << communicator.getTrump() << std::endl;
 
 	std::cout << "----------Main Deck----------\n";
 	myEuchreDeck.printDeck();
-	/*
-	myEuchreDeck.printDeck();
+	std::cout << "-----------------------------\n";
 
-	for (int i = 0; i < 5; i++)
-	{
-		myEuchreDeck.shuffle();
-		std::cout << "---------------------------------------Post " << i+1 << " shuffle---------------------------------------\n";
-		myEuchreDeck.printDeck();
-	}
-
-	std::cout << "----------Main Deck----------\n";
-	myEuchreDeck.printDeck();
-
-	communicator.passCardsToPlayers(players, &myEuchreDeck);
-
-	for (int i = 0; i < 4; i++)
-	{
-		displayAllPlayersCards(players);
-		communicator.playersPlaceCardOnPile(players, &pileDeck);
-	}
-
-	std::cout << "----------Pile Deck----------\n";
-	pileDeck.printDeck();
-	*/
+	displayAllPlayersCards(players);
 
 	return 0;
 }
@@ -68,7 +58,15 @@ void displayAllPlayersCards(Player p[4])
 {
 	for (int i = 0; i < 4; i++)
 	{
-		std::cout << "----------Player " << i + 1 << " Deck----------\n";
+		if (p[i].getDealerStatus() == true)
+		{
+			std::cout << "----------Player " << i << " Deck----------*Dealer*\n";
+		}
+		else
+		{
+			std::cout << "----------Player " << i << " Deck----------\n";
+		}
 		p[i].viewDeck();
+		std::cout << "---------------------------------\n";
 	}
 }

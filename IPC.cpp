@@ -8,6 +8,26 @@ IPC::IPC()
 	trumpSuit = 'X';
 }
 
+IPC::IPC(int dlr)
+{
+	if (dlr < 0)
+	{
+		dealer = 0;
+		currentPlayer = 1;
+	}
+	else if (dlr >= 3)
+	{
+		dealer = 3;
+		currentPlayer = 0;
+	}
+	else
+	{
+		dealer = dlr;
+		currentPlayer = dlr + 1;
+	}
+	trumpSuit = 'X';
+}
+
 void IPC::passCardsToPlayers(Player p[4], Deck* mainDeck)
 {
 	for (int i = 0; i < 20; i++)
@@ -27,38 +47,17 @@ void IPC::displayTopCardInMainDeck(Deck* mainDeck)
 
 bool IPC::pickUpOrPass(Player p[4], Deck* mainDeck)
 {
-	currentPlayer = dealer + 1;
+	/*Setting current player here is eventually going to fail, need to create a 
+	setter and change current player at the correct time, this is not the correct time*/
+	//currentPlayer = dealer + 1; 
 	char playerResponse;
 
-	if (currentPlayer > 3)
+	if (currentPlayer >= 3)
 		currentPlayer = 0;
-	else
+
+	while (currentPlayer != dealer)
 	{
-		while (currentPlayer != dealer)
-		{
-			std::cout << "Player " << currentPlayer << ", should the dealer pick up the card? (y/n)";
-			std::cin >> playerResponse;
-			while (playerResponse != 'n' && playerResponse != 'y')
-			{
-				std::cout << "Invalid input, try again";
-				std::cin >> playerResponse;
-			}
-			if (playerResponse == 'n')
-			{
-				if (currentPlayer >= 3)
-					currentPlayer = 0;
-				else
-					currentPlayer++;
-			}
-			else if(playerResponse == 'y')
-			{
-				trumpSuit = mainDeck->topOfMainDeck()->suit;
-				p[dealer].getDeck()->push(mainDeck->pop());
-				//function that makes the dealer discard a card in their hand
-				return true;
-			}
-		}
-		std::cout << "Dealer, would you like to pick up the card? (y/n)";
+		std::cout << "Player " << currentPlayer << ", should the dealer pick up the card? (y/n)";
 		std::cin >> playerResponse;
 		while (playerResponse != 'n' && playerResponse != 'y')
 		{
@@ -67,16 +66,52 @@ bool IPC::pickUpOrPass(Player p[4], Deck* mainDeck)
 		}
 		if (playerResponse == 'n')
 		{
-			return false;
+			if (currentPlayer >= 3)
+				currentPlayer = 0;
+			else
+				currentPlayer++;
 		}
 		else if (playerResponse == 'y')
 		{
 			trumpSuit = mainDeck->topOfMainDeck()->suit;
 			p[dealer].getDeck()->push(mainDeck->pop());
-			//function that makes the dealer discard a card in their hand
 			return true;
 		}
 	}
+	std::cout << "Dealer, would you like to pick up the card? (y/n)";
+	std::cin >> playerResponse;
+	while (playerResponse != 'n' && playerResponse != 'y')
+	{
+		std::cout << "Invalid input, try again";
+		std::cin >> playerResponse;
+	}
+	if (playerResponse == 'n')
+	{
+		return false;
+	}
+	else if (playerResponse == 'y')
+	{
+		trumpSuit = mainDeck->topOfMainDeck()->suit;
+		p[dealer].getDeck()->push(mainDeck->pop());
+		return true;
+	}
+	std::cerr << "SOMETHING WENT WRONG, CLOSING PROGRAM\n";
+	exit(0);
+}
+
+void IPC::cardToDiscard(Player p[4], Deck* mainDeck)
+{
+	char suit;
+	std::string name;
+	int result = -1;
+
+	while (result == -1)
+	{
+		std::cout << "Which card would you like to discard? (suit, name)";
+		std::cin >> suit >> name;
+		result = p[dealer].getDeck()->searchAndDiscard(suit, name, mainDeck);
+	}
+	
 }
 
 char IPC::pickASuit(Deck* mainDeck)
@@ -103,7 +138,7 @@ char IPC::pickASuit(Deck* mainDeck)
 				}
 				else
 				{
-					std::cout << "Invalid input, try again: ";
+					std::cout << "Invalid input, try again: \n";
 					std::cin >> playerResponse;
 				}
 			}
@@ -184,4 +219,38 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 char IPC::getTrump()
 {
 	return trumpSuit;
+}
+
+int IPC::getCurrentDealer()
+{
+	return dealer;
+}
+
+void IPC::setDealer(Player p[4])
+{
+	p[dealer].setDealerStatus(true);
+}
+
+void IPC::setNextDealerAndUpdatePrevious(Player p[4])
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (p[i].getDealerStatus() == true)
+		{
+			if (i >= 3)
+			{
+				p[i].setDealerStatus(false);
+				p[0].setDealerStatus(true);
+				dealer = 0;
+				return;
+			}
+			else
+			{
+				p[i].setDealerStatus(false);
+				p[i+1].setDealerStatus(true);
+				dealer = i + 1;
+				return;
+			}
+		}
+	}
 }

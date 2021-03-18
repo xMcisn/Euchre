@@ -25,6 +25,7 @@ public:
 	void printDeck();
 	void buildMainDeck(); // should only be used in main when creating the main deck
 	int getDeckSize();
+	int searchAndDiscard(char st, std::string nme, Deck* mainDeck);
 
 	Card* topOfMainDeck()
 	{

@@ -18,5 +18,8 @@ public:
 
 	int getNumOfCardsInHand();
 	void increaseNumOfCardsInHand();
+
+	void setDealerStatus(bool status);
+	bool getDealerStatus();
 };
 #endif // !PLAYER_H
