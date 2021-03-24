@@ -24,6 +24,8 @@ int main()
 	for (int i = 0; i < 5; i++)
 	{
 		myEuchreDeck.shuffle();
+		std::cout << "------Shuffle " << i+1 << " ------\n";
+		myEuchreDeck.printDeck();
 	}
 
 	communicator.setDealer(players);
@@ -51,6 +53,15 @@ int main()
 
 	displayAllPlayersCards(players);
 
+	std::cout << "Current Player: " << communicator.getCurrentPlayer() << std::endl;
+	for(int i = 0; i < 5; i++)
+	{
+		communicator.playersPlaceCardOnPile(players, &pileDeck);
+		std::cout << "------Pile Deck after round " << i+1 << " ------\n";
+		pileDeck.printDeck();
+		std::cout << "---------------------------------------\n";
+		displayAllPlayersCards(players);
+	}
 	return 0;
 }
 

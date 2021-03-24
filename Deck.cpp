@@ -112,7 +112,7 @@ void Deck::shuffle()
 	int iterator = 1;
 	int newDeckSize = 0;
 
-	srand(unsigned int(time(0)));
+	srand(unsigned(time(0)));
 
 	if (head == NULL)
 	{
@@ -250,6 +250,7 @@ int Deck::searchAndDiscard(char st, std::string nme, Deck* mainDeck)
 			if (toRemove->suit == st && toRemove->name == nme)
 			{
 				mainDeck->push(toRemove);
+				deckSize--;
 				return 1;
 			}
 			else

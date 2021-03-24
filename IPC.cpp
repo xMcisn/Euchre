@@ -109,7 +109,7 @@ void IPC::cardToDiscard(Player p[4], Deck* mainDeck)
 	{
 		std::cout << "Which card would you like to discard? (suit, name)";
 		std::cin >> suit >> name;
-		result = p[dealer].getDeck()->searchAndDiscard(suit, name, mainDeck);
+		result = p[dealer].getDeck()->searchAndDiscard(suit, name, mainDeck); //Error in search and discard function.
 	}
 	
 }
@@ -210,15 +210,23 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 {
 	for (int i = 0; i < 4; i++)
 	{
+		if(currentPlayer > 3)
+			currentPlayer = 0;
+
 		pileDeck->push(p[currentPlayer].getDeck()->pop());
 		currentPlayer++;
 	}
-	currentPlayer = 0;
+	currentPlayer = dealer + 1; // current player should be set to the trick winner instead of the player next to the dealer
 }
 
 char IPC::getTrump()
 {
 	return trumpSuit;
+}
+
+int IPC::getCurrentPlayer()
+{
+	return currentPlayer;
 }
 
 int IPC::getCurrentDealer()

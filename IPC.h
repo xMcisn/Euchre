@@ -23,6 +23,7 @@ public:
 
 
 	char getTrump();
+	int getCurrentPlayer();
 	int getCurrentDealer();
 	void setDealer(Player p[4]);
 	void setNextDealerAndUpdatePrevious(Player p[4]);
