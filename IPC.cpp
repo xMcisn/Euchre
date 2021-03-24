@@ -3,8 +3,8 @@
 
 IPC::IPC()
 {
-	currentPlayer = 0;
 	dealer = 0;
+	currentPlayer = 1;
 	trumpSuit = 'X';
 }
 
@@ -34,7 +34,7 @@ void IPC::passCardsToPlayers(Player p[4], Deck* mainDeck)
 	{
 		if (p[i%4].getNumOfCardsInHand() < 5)
 		{
-			p[i%4].getDeck()->push(mainDeck->pop());
+			p[i%4].getDeck()->push(mainDeck->pop(), i%4);
 			p[i%4].increaseNumOfCardsInHand();
 		}
 	}
@@ -74,7 +74,7 @@ bool IPC::pickUpOrPass(Player p[4], Deck* mainDeck)
 		else if (playerResponse == 'y')
 		{
 			trumpSuit = mainDeck->topOfMainDeck()->suit;
-			p[dealer].getDeck()->push(mainDeck->pop());
+			p[dealer].getDeck()->push(mainDeck->pop(), dealer);
 			return true;
 		}
 	}
@@ -92,7 +92,7 @@ bool IPC::pickUpOrPass(Player p[4], Deck* mainDeck)
 	else if (playerResponse == 'y')
 	{
 		trumpSuit = mainDeck->topOfMainDeck()->suit;
-		p[dealer].getDeck()->push(mainDeck->pop());
+		p[dealer].getDeck()->push(mainDeck->pop(), dealer);
 		return true;
 	}
 	std::cerr << "SOMETHING WENT WRONG, CLOSING PROGRAM\n";
@@ -107,9 +107,9 @@ void IPC::cardToDiscard(Player p[4], Deck* mainDeck)
 
 	while (result == -1)
 	{
-		std::cout << "Which card would you like to discard? (suit, name)";
-		std::cin >> suit >> name;
-		result = p[dealer].getDeck()->searchAndDiscard(suit, name, mainDeck); //Error in search and discard function.
+		std::cout << "Which card would you like to discard? (name, suit)";
+		std::cin >> name >> suit;
+		result = p[dealer].getDeck()->searchAndDiscard(suit, name, mainDeck); //Fixed error
 	}
 	
 }
@@ -208,15 +208,21 @@ if it has that suit in hand, if it doesn't then they need to play a lower
 card*/
 void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 {
+	int trickWinner = -1;
+
 	for (int i = 0; i < 4; i++)
 	{
 		if(currentPlayer > 3)
 			currentPlayer = 0;
-
-		pileDeck->push(p[currentPlayer].getDeck()->pop());
+		// also if i == 0 then this player can throw down any card they want
+		// otherwise (see next comment below)
+		// player needs to choose a matching suit if they have one otherwise throw down a lower level card off suit
+		pileDeck->push(p[currentPlayer].getDeck()->pop()); // instead of pop it needs to be 
+		// determine who the current trick winner is by checking card up against the others
+		// 
 		currentPlayer++;
 	}
-	currentPlayer = dealer + 1; // current player should be set to the trick winner instead of the player next to the dealer
+	currentPlayer = trickWinner; // current player should be set to the trick winner instead of the player next to the dealer
 }
 
 char IPC::getTrump()

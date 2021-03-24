@@ -22,10 +22,10 @@ void Deck::printDeck()
 
 	for (int i = 0; i < deckSize; i++)
 	{
-		std::cout << i+1 << ": " << cardIter->name << " " << cardIter->suit << std::endl;
+		std::cout << i+1 << ": " << cardIter->name << " " << cardIter->suit << " " << cardIter->cardOwner << std::endl;
 		cardIter = cardIter->next;
 	}
-
+	std::cout << "Deck Size is " << getDeckSize() << std::endl;
 	cardIter = NULL;
 	delete cardIter;
 }
@@ -95,6 +95,8 @@ void Deck::buildMainDeck()
 			newCard->next = NULL;
 			tail = newCard;
 		}
+
+		newCard->cardOwner = -1;
 
 		deckSize++;
 		tail = newCard;
@@ -249,24 +251,74 @@ int Deck::searchAndDiscard(char st, std::string nme, Deck* mainDeck)
 		{
 			if (toRemove->suit == st && toRemove->name == nme)
 			{
+				cardBefore->next = toRemove->next;
+				toRemove->next = NULL;
 				mainDeck->push(toRemove);
 				deckSize--;
 				return 1;
 			}
 			else
 			{
-				toRemove = toRemove->next;
-				if (toRemove != NULL)
+				if (toRemove->next != NULL)
 				{
-					if (toRemove->suit == st && toRemove->name == nme)
+					if (toRemove->next->suit == st && toRemove->next->name == nme)
 					{
 						cardBefore = toRemove;
-						cardBefore->next = toRemove->next;
-						toRemove->next = NULL;
-						deckSize--;
 					}
 				}
 			}
+			toRemove = toRemove->next;
+		}
+		std::cout << "Card not found try again...\n";
+		return -1;
+	}
+}
+
+
+//Need to search through deck and check if the player has a card that matches the previously played suit, if they don't then
+// they should probably look for a Trump card otherwise just throw out a low card off suit <--- honestly this part isn't really necessary for the test unless it is 100% automated
+// which it might have to be otherwise it will take me forever to finish
+int Deck::searchAndPlay(char st, std::string nme, Deck* pileDeck)
+{
+	Card* cardBefore = head;
+	Card* toRemove = head;
+
+	if (head == NULL)
+	{
+		std::cerr << "Head is NULL, exiting program...\n";
+		exit(0);
+	}
+	else if (head->suit == st && head->name == nme)
+	{
+		head = head->next;
+		toRemove->next = NULL;
+		pileDeck->push(toRemove);
+		deckSize--;
+		return 1;
+	}
+	else
+	{
+		while (toRemove != NULL)
+		{
+			if (toRemove->suit == st && toRemove->name == nme)
+			{
+				cardBefore->next = toRemove->next;
+				toRemove->next = NULL;
+				pileDeck->push(toRemove);
+				deckSize--;
+				return 1;
+			}
+			else
+			{
+				if (toRemove->next != NULL)
+				{
+					if (toRemove->next->suit == st && toRemove->next->name == nme)
+					{
+						cardBefore = toRemove;
+					}
+				}
+			}
+			toRemove = toRemove->next;
 		}
 		std::cout << "Card not found try again...\n";
 		return -1;

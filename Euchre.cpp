@@ -13,7 +13,7 @@ int main()
 	Deck myEuchreDeck;
 	Deck pileDeck;
 	Player players[4];
-	IPC communicator(1);
+	IPC communicator;
 
 	myEuchreDeck.buildMainDeck();
 

@@ -10,6 +10,7 @@ private:
 	int numCardsInHand;
 	Deck playerDeck;
 	bool dealerStatus;
+	std::string playerType;
 public:
 	Player();
 
@@ -21,5 +22,8 @@ public:
 
 	void setDealerStatus(bool status);
 	bool getDealerStatus();
+
+	void setPlayerType(std::string newType);
+	std::string getPlayerType();
 };
 #endif // !PLAYER_H

@@ -5,6 +5,7 @@ Player::Player()
 {
 	numCardsInHand = 0;
 	dealerStatus = false;
+	playerType = "AI";
 }
 
 void Player::viewDeck()
@@ -35,4 +36,14 @@ void Player::setDealerStatus(bool status)
 bool Player::getDealerStatus()
 {
 	return dealerStatus;
+}
+
+void Player::setPlayerType(std::string newType)
+{
+	playerType = newType;
+}
+
+std::string Player::getPlayerType()
+{
+	return playerType;
 }

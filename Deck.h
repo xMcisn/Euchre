@@ -10,6 +10,7 @@ class Deck
 	{
 		char suit;
 		std::string name;
+		int cardOwner;
 		Card * next;
 	};
 
@@ -26,6 +27,7 @@ public:
 	void buildMainDeck(); // should only be used in main when creating the main deck
 	int getDeckSize();
 	int searchAndDiscard(char st, std::string nme, Deck* mainDeck);
+	int searchAndPlay(char st, std::string nme, Deck* pileDeck);
 
 	Card* topOfMainDeck()
 	{
@@ -49,6 +51,7 @@ public:
 			return tempHead;
 		}
 	}
+
 	void push(Card* c) // function currently for player only
 	{
 		if (head == NULL)
@@ -59,6 +62,23 @@ public:
 		else
 		{
 			c->next = head;
+			head = c;
+		}
+		deckSize++;
+	}
+
+	void push(Card* c, int owner) // function currently for player only
+	{
+		if (head == NULL)
+		{
+			c->cardOwner = owner;
+			head = c;
+			tail = c;
+		}
+		else
+		{
+			c->next = head;
+			c->cardOwner = owner;
 			head = c;
 		}
 		deckSize++;
