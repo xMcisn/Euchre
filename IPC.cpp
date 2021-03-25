@@ -26,6 +26,7 @@ IPC::IPC(int dlr)
 		currentPlayer = dlr + 1;
 	}
 	trumpSuit = 'X';
+	trickWinner = currentPlayer;
 }
 
 void IPC::passCardsToPlayers(Player p[4], Deck* mainDeck)
@@ -177,6 +178,7 @@ char IPC::pickASuit(Deck* mainDeck)
 		}
 		switch (playerResponse)
 		{
+			currentPlayer = dealer + 1;
 		case 'H':
 			trumpSuit = 'H';
 			return trumpSuit;
@@ -208,26 +210,70 @@ if it has that suit in hand, if it doesn't then they need to play a lower
 card*/
 void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 {
-	int trickWinner = -1;
+	static char firstPlayedSuit = 'X';
+	char suit;
+	std::string name;
+	int result = -1;
+	int playerHasCardOnSuit = -1;
 
 	for (int i = 0; i < 4; i++)
 	{
 		if(currentPlayer > 3)
 			currentPlayer = 0;
-		// also if i == 0 then this player can throw down any card they want
-		// otherwise (see next comment below)
+
+		if (i == 0)
+		{
+			while (result == -1)
+			{
+				std::cout << "Player " << currentPlayer << ", which card would you like to play? (name, suit)";
+				std::cin >> name >> suit;
+				result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
+				firstPlayedSuit = suit;
+			}
+			std::cout << "==========Pile Deck==========\n";
+			pileDeck->printDeck();
+		}
+		else
+		{
+			result = -1;
+			playerHasCardOnSuit = p[currentPlayer].getDeck()->searchForFirstPlayedSuit(firstPlayedSuit);
+			while (result == -1)
+			{
+				std::cout << "Player " << currentPlayer << ", which card would you like to play? (name, suit)";
+				std::cin >> name >> suit;
+				if (playerHasCardOnSuit == 1 && suit != firstPlayedSuit)
+				{
+					std::cout << "You must play a card that follows suit (" << firstPlayedSuit << "): \n";
+					result = -1;
+				}
+				else
+				{
+					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
+				}
+			}
+			std::cout << "==========Pile Deck==========\n";
+			pileDeck->printDeck();
+		}
 		// player needs to choose a matching suit if they have one otherwise throw down a lower level card off suit
-		pileDeck->push(p[currentPlayer].getDeck()->pop()); // instead of pop it needs to be 
+		//pileDeck->push(p[currentPlayer].getDeck()->pop()); // instead of pop it needs to be 
 		// determine who the current trick winner is by checking card up against the others
 		// 
 		currentPlayer++;
 	}
+	trickWinner = pileDeck->determineHighestValueCard(trumpSuit, firstPlayedSuit);
 	currentPlayer = trickWinner; // current player should be set to the trick winner instead of the player next to the dealer
+	std::cout << "Trick winner is: " << trickWinner << std::endl;
 }
 
 char IPC::getTrump()
 {
 	return trumpSuit;
+}
+
+
+void IPC::setCurrentPlayer(int curPlyer)
+{
+	currentPlayer = curPlyer;
 }
 
 int IPC::getCurrentPlayer()

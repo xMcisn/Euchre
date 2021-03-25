@@ -19,7 +19,6 @@ int main()
 
 	std::cout << "----------Main Deck----------\n";
 	myEuchreDeck.printDeck();
-	std::cout << "-----------------------------\n";
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -49,19 +48,19 @@ int main()
 
 	std::cout << "----------Main Deck----------\n";
 	myEuchreDeck.printDeck();
-	std::cout << "-----------------------------\n";
 
 	displayAllPlayersCards(players);
+	
+	communicator.setCurrentPlayer(communicator.getCurrentDealer() + 1);
 
 	std::cout << "Current Player: " << communicator.getCurrentPlayer() << std::endl;
-	for(int i = 0; i < 5; i++)
-	{
+	//for(int i = 0; i < 5; i++)
+	//{
 		communicator.playersPlaceCardOnPile(players, &pileDeck);
-		std::cout << "------Pile Deck after round " << i+1 << " ------\n";
+		std::cout << "==========Pile Deck==========\n";//std::cout << "------Pile Deck after round " << i+1 << " ------\n";
 		pileDeck.printDeck();
-		std::cout << "---------------------------------------\n";
 		displayAllPlayersCards(players);
-	}
+	//}
 	return 0;
 }
 
@@ -78,6 +77,5 @@ void displayAllPlayersCards(Player p[4])
 			std::cout << "----------Player " << i << " Deck----------\n";
 		}
 		p[i].viewDeck();
-		std::cout << "---------------------------------\n";
 	}
 }

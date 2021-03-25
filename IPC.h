@@ -10,6 +10,7 @@ private:
 	int currentPlayer;
 	int dealer;
 	char trumpSuit;
+	int trickWinner;
 public:
 	IPC();
 	IPC(int dlr);
@@ -23,9 +24,13 @@ public:
 
 
 	char getTrump();
+
+	void setCurrentPlayer(int curPlyr);
 	int getCurrentPlayer();
-	int getCurrentDealer();
+
 	void setDealer(Player p[4]);
+	int getCurrentDealer();
+	
 	void setNextDealerAndUpdatePrevious(Player p[4]);
 };
 

@@ -11,6 +11,7 @@ class Deck
 		char suit;
 		std::string name;
 		int cardOwner;
+		int cardValue;
 		Card * next;
 	};
 
@@ -18,7 +19,7 @@ class Deck
 	Card* tail;
 
 	int deckSize;
-	std::string myCardNames[6] = { "9", "10", "J", "Q", "K", "A" };
+	const std::string myCardNames[6] = { "9", "10", "J", "Q", "K", "A" };
 
 public:
 	Deck();
@@ -28,6 +29,8 @@ public:
 	int getDeckSize();
 	int searchAndDiscard(char st, std::string nme, Deck* mainDeck);
 	int searchAndPlay(char st, std::string nme, Deck* pileDeck);
+    int searchForFirstPlayedSuit(char firstPlayedSt);
+	int determineHighestValueCard(char trumpSuit, char firstPlayedSuit);
 
 	Card* topOfMainDeck()
 	{
@@ -82,6 +85,11 @@ public:
 			head = c;
 		}
 		deckSize++;
+	}
+
+	Card* getHead()
+	{
+		return head;
 	}
 };
 

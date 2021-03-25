@@ -22,10 +22,11 @@ void Deck::printDeck()
 
 	for (int i = 0; i < deckSize; i++)
 	{
-		std::cout << i+1 << ": " << cardIter->name << " " << cardIter->suit << " " << cardIter->cardOwner << std::endl;
+		std::cout << i+1 << ": " << cardIter->name << " " << cardIter->suit << " " << cardIter->cardOwner << " " << cardIter->cardValue << std::endl;
 		cardIter = cardIter->next;
 	}
 	std::cout << "Deck Size is " << getDeckSize() << std::endl;
+	std::cout << "-----------------------------\n";
 	cardIter = NULL;
 	delete cardIter;
 }
@@ -41,26 +42,32 @@ void Deck::buildMainDeck()
 		if (i < 4)
 		{
 			newCard->name = myCardNames[0];
+			newCard->cardValue = 0;
 		}
 		else if (i < 8)
 		{
 			newCard->name = myCardNames[1];
+			newCard->cardValue = 1;
 		}
 		else if (i < 12)
 		{
 			newCard->name = myCardNames[2];
+			newCard->cardValue = 2;
 		}
 		else if (i < 16)
 		{
 			newCard->name = myCardNames[3];
+			newCard->cardValue = 3;
 		}
 		else if (i < 20)
 		{
 			newCard->name = myCardNames[4];
+			newCard->cardValue = 4;
 		}
 		else if (i < 24)
 		{
 			newCard->name = myCardNames[5];
+			newCard->cardValue = 5;
 		}
 
 		if (i % 4 == 0)
@@ -323,4 +330,106 @@ int Deck::searchAndPlay(char st, std::string nme, Deck* pileDeck)
 		std::cout << "Card not found try again...\n";
 		return -1;
 	}
+}
+
+// This function needs to check if a player has a Jack of other "Trump" suit For example, Hearts is trump so they needs to check if they have a Jack of diamonds if a heart gets played
+// Like say that a 10 of hearts gets played and the user only has a Jack of diamonds and no other heart, then they must play that card... that should finish the project right there.
+int Deck::searchForFirstPlayedSuit(char firstSt) 
+{
+	Card* searchForFirstSt = head;
+
+	if (head == NULL)
+	{
+		std::cerr << "Head is NULL, exiting program...\n";
+		exit(0);
+	}
+
+	while (searchForFirstSt != NULL)
+	{
+		if (searchForFirstSt->suit == firstSt)
+			return 1;
+
+		searchForFirstSt = searchForFirstSt->next;
+	}
+	return -1;
+}
+
+int Deck::determineHighestValueCard(char trumpSt, char firstPlayedSt)
+{
+	Card* highestValueCardFinder = head;
+	int playerWithHighestCard = -1;
+	int maxValue = -1;
+
+	if (head == NULL)
+	{
+		std::cerr << "Head is NULL. Exiting program...\n";
+		exit(1);
+	}
+	else
+	{
+		maxValue = highestValueCardFinder->cardValue;
+
+		while (highestValueCardFinder != NULL)
+		{
+			if (trumpSt == 'H')
+			{
+				if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == trumpSt)
+				{
+					return highestValueCardFinder->cardOwner;
+				}
+				else if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == 'D')
+				{
+					playerWithHighestCard = highestValueCardFinder->cardOwner;
+					maxValue = 5;
+				}
+			}
+			else if (trumpSt == 'D')
+			{
+				if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == trumpSt)
+				{
+					return highestValueCardFinder->cardOwner;
+				}
+				else if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == 'H')
+				{
+					playerWithHighestCard = highestValueCardFinder->cardOwner;
+					maxValue = 5;
+				}
+			}
+			else if (trumpSt == 'C')
+			{
+				if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == trumpSt)
+				{
+					return highestValueCardFinder->cardOwner;
+				}
+				else if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == 'S')
+				{
+					playerWithHighestCard = highestValueCardFinder->cardOwner;
+					maxValue = 5;
+				}
+			}
+			else if (trumpSt == 'S')
+			{
+				if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == trumpSt)
+				{
+					return highestValueCardFinder->cardOwner;
+				}
+				else if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == 'C')
+				{
+					playerWithHighestCard = highestValueCardFinder->cardOwner;
+					maxValue = 5;
+				}
+			}
+			else
+			{
+				if (highestValueCardFinder->cardValue > maxValue)
+				{
+					maxValue = highestValueCardFinder->cardValue;
+					playerWithHighestCard = highestValueCardFinder->cardOwner;
+				}
+			}
+			highestValueCardFinder = highestValueCardFinder->next;
+		}
+		return playerWithHighestCard;
+	}
+	return playerWithHighestCard;
 }
