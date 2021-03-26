@@ -26,7 +26,7 @@ void Deck::printDeck()
 		cardIter = cardIter->next;
 	}
 	std::cout << "Deck Size is " << getDeckSize() << std::endl;
-	std::cout << "-----------------------------\n";
+	std::cout << "---------------------------------\n";
 	cardIter = NULL;
 	delete cardIter;
 }
@@ -334,7 +334,7 @@ int Deck::searchAndPlay(char st, std::string nme, Deck* pileDeck)
 
 // This function needs to check if a player has a Jack of other "Trump" suit For example, Hearts is trump so they needs to check if they have a Jack of diamonds if a heart gets played
 // Like say that a 10 of hearts gets played and the user only has a Jack of diamonds and no other heart, then they must play that card... that should finish the project right there.
-int Deck::searchForFirstPlayedSuit(char firstSt) 
+int Deck::searchForFirstPlayedSuit(char firstSt, char trumpSt) 
 {
 	Card* searchForFirstSt = head;
 
@@ -347,7 +347,37 @@ int Deck::searchForFirstPlayedSuit(char firstSt)
 	while (searchForFirstSt != NULL)
 	{
 		if (searchForFirstSt->suit == firstSt)
+		{
 			return 1;
+		}
+		else if(trumpSt == 'H')
+		{
+			if(searchForFirstSt->name == "J" && searchForFirstSt->suit == 'D')
+			{
+				return 2;
+			}
+		}
+		else if(trumpSt == 'D')
+		{
+			if(searchForFirstSt->name == "J" && searchForFirstSt->suit == 'H')
+			{
+				return 3;
+			}
+		}
+		else if(trumpSt == 'C')
+		{
+			if(searchForFirstSt->name == "J" && searchForFirstSt->suit == 'S')
+			{
+				return 4;
+			}
+		}
+		else if(trumpSt == 'S')
+		{
+			if(searchForFirstSt->name == "J" && searchForFirstSt->suit == 'C')
+			{
+				return 5;
+			}
+		}
 
 		searchForFirstSt = searchForFirstSt->next;
 	}
@@ -357,7 +387,12 @@ int Deck::searchForFirstPlayedSuit(char firstSt)
 int Deck::determineHighestValueCard(char trumpSt, char firstPlayedSt)
 {
 	Card* highestValueCardFinder = head;
+	Card* highestValueTrumpFinder = head;
+
+	int playerWithHighestTrump = -1;
 	int playerWithHighestCard = -1;
+
+	int maxTrumpValue = -1;
 	int maxValue = -1;
 
 	if (head == NULL)
@@ -367,69 +402,105 @@ int Deck::determineHighestValueCard(char trumpSt, char firstPlayedSt)
 	}
 	else
 	{
-		maxValue = highestValueCardFinder->cardValue;
-
-		while (highestValueCardFinder != NULL)
+		while (highestValueCardFinder != NULL && highestValueTrumpFinder != NULL)
 		{
 			if (trumpSt == 'H')
 			{
-				if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == trumpSt)
+				if (highestValueTrumpFinder->name == "J" && highestValueTrumpFinder->suit == trumpSt)
 				{
-					return highestValueCardFinder->cardOwner;
+					return highestValueTrumpFinder->cardOwner;
 				}
-				else if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == 'D')
+				else if (highestValueTrumpFinder->name == "J" && highestValueTrumpFinder->suit == 'D')
 				{
-					playerWithHighestCard = highestValueCardFinder->cardOwner;
-					maxValue = 5;
+					playerWithHighestTrump = highestValueTrumpFinder->cardOwner;
+					maxTrumpValue = 6;
+				}
+				else
+				{
+					if(highestValueTrumpFinder->cardValue > maxTrumpValue && highestValueTrumpFinder->suit == trumpSt)
+					{
+						maxTrumpValue = highestValueTrumpFinder->cardValue;
+						playerWithHighestTrump = highestValueTrumpFinder->cardOwner;
+					}
 				}
 			}
 			else if (trumpSt == 'D')
 			{
-				if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == trumpSt)
+				if (highestValueTrumpFinder->name == "J" && highestValueTrumpFinder->suit == trumpSt)
 				{
-					return highestValueCardFinder->cardOwner;
+					return highestValueTrumpFinder->cardOwner;
 				}
-				else if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == 'H')
+				else if (highestValueTrumpFinder->name == "J" && highestValueTrumpFinder->suit == 'H')
 				{
-					playerWithHighestCard = highestValueCardFinder->cardOwner;
-					maxValue = 5;
+					playerWithHighestTrump = highestValueTrumpFinder->cardOwner;
+					maxTrumpValue = 6;
+				}
+				else
+				{
+					if(highestValueTrumpFinder->cardValue > maxTrumpValue && highestValueTrumpFinder->suit == trumpSt)
+					{
+						maxTrumpValue = highestValueTrumpFinder->cardValue;
+						playerWithHighestTrump = highestValueTrumpFinder->cardOwner;
+					}
 				}
 			}
 			else if (trumpSt == 'C')
 			{
-				if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == trumpSt)
+				if (highestValueTrumpFinder->name == "J" && highestValueTrumpFinder->suit == trumpSt)
 				{
-					return highestValueCardFinder->cardOwner;
+					return highestValueTrumpFinder->cardOwner;
 				}
-				else if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == 'S')
+				else if (highestValueTrumpFinder->name == "J" && highestValueTrumpFinder->suit == 'S')
 				{
-					playerWithHighestCard = highestValueCardFinder->cardOwner;
-					maxValue = 5;
+					playerWithHighestTrump = highestValueTrumpFinder->cardOwner;
+					maxTrumpValue = 6;
+				}
+				else
+				{
+					if(highestValueTrumpFinder->cardValue > maxTrumpValue && highestValueTrumpFinder->suit == trumpSt)
+					{
+						maxTrumpValue = highestValueTrumpFinder->cardValue;
+						playerWithHighestTrump = highestValueTrumpFinder->cardOwner;
+					}
 				}
 			}
 			else if (trumpSt == 'S')
 			{
-				if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == trumpSt)
+				if (highestValueTrumpFinder->name == "J" && highestValueTrumpFinder->suit == trumpSt)
 				{
-					return highestValueCardFinder->cardOwner;
+					return highestValueTrumpFinder->cardOwner;
 				}
-				else if (highestValueCardFinder->name == "J" && highestValueCardFinder->suit == 'C')
+				else if (highestValueTrumpFinder->name == "J" && highestValueTrumpFinder->suit == 'C')
 				{
-					playerWithHighestCard = highestValueCardFinder->cardOwner;
-					maxValue = 5;
+					playerWithHighestTrump = highestValueTrumpFinder->cardOwner;
+					maxTrumpValue = 6;
+				}
+				else
+				{
+					if(highestValueTrumpFinder->cardValue > maxTrumpValue && highestValueTrumpFinder->suit == trumpSt)
+					{
+						maxTrumpValue = highestValueTrumpFinder->cardValue;
+						playerWithHighestTrump = highestValueTrumpFinder->cardOwner;
+					}
 				}
 			}
-			else
+
+			if (highestValueCardFinder->cardValue > maxValue)
 			{
-				if (highestValueCardFinder->cardValue > maxValue)
-				{
-					maxValue = highestValueCardFinder->cardValue;
-					playerWithHighestCard = highestValueCardFinder->cardOwner;
-				}
+				maxValue = highestValueCardFinder->cardValue;
+				playerWithHighestCard = highestValueCardFinder->cardOwner;
 			}
+
 			highestValueCardFinder = highestValueCardFinder->next;
+			highestValueTrumpFinder = highestValueTrumpFinder->next;
 		}
+	}
+	if(maxTrumpValue > -1)
+	{
+		return playerWithHighestTrump;
+	}
+	else
+	{
 		return playerWithHighestCard;
 	}
-	return playerWithHighestCard;
 }

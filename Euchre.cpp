@@ -14,6 +14,7 @@ int main()
 	Deck pileDeck;
 	Player players[4];
 	IPC communicator;
+	char trumpSt = '-';
 
 	myEuchreDeck.buildMainDeck();
 
@@ -40,27 +41,37 @@ int main()
 	displayAllPlayersCards(players);
 
 	if (result == 0)
-		communicator.pickASuit(&myEuchreDeck);
+		trumpSt = communicator.pickASuit(&myEuchreDeck);
 	else
 		communicator.cardToDiscard(players, &myEuchreDeck);
 
-	std::cout << "Trump Suit: " << communicator.getTrump() << std::endl;
+	if(trumpSt == 'X')
+	{
+		std::cout << "No suit was picked. Ending program.\n";
+		return 0;
+	}
 
 	std::cout << "----------Main Deck----------\n";
 	myEuchreDeck.printDeck();
 
 	displayAllPlayersCards(players);
-	
+	std::cout << "Trump Suit: " << communicator.getTrump() << std::endl;
 	communicator.setCurrentPlayer(communicator.getCurrentDealer() + 1);
 
 	std::cout << "Current Player: " << communicator.getCurrentPlayer() << std::endl;
-	//for(int i = 0; i < 5; i++)
-	//{
+	for(int i = 0; i < 5; i++)
+	{
 		communicator.playersPlaceCardOnPile(players, &pileDeck);
-		std::cout << "==========Pile Deck==========\n";//std::cout << "------Pile Deck after round " << i+1 << " ------\n";
+	    std::cout << "------Pile Deck after round " << i+1 << " ------\n";
 		pileDeck.printDeck();
+		std::cout << "Trump Suit: " << communicator.getTrump() << std::endl;
 		displayAllPlayersCards(players);
-	//}
+		communicator.placeCardsBackInMainDeck(&pileDeck, &myEuchreDeck);
+	}
+	communicator.setNextDealerAndUpdatePrevious(players);
+	std::cout << "----------Main Deck----------\n";
+	myEuchreDeck.printDeck();
+
 	return 0;
 }
 

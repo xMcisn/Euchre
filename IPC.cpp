@@ -6,6 +6,7 @@ IPC::IPC()
 	dealer = 0;
 	currentPlayer = 1;
 	trumpSuit = 'X';
+	trumpCaller = -1;
 }
 
 IPC::IPC(int dlr)
@@ -27,6 +28,7 @@ IPC::IPC(int dlr)
 	}
 	trumpSuit = 'X';
 	trickWinner = currentPlayer;
+	trumpCaller = -1;
 }
 
 void IPC::passCardsToPlayers(Player p[4], Deck* mainDeck)
@@ -74,6 +76,7 @@ bool IPC::pickUpOrPass(Player p[4], Deck* mainDeck)
 		}
 		else if (playerResponse == 'y')
 		{
+			trumpCaller = currentPlayer;
 			trumpSuit = mainDeck->topOfMainDeck()->suit;
 			p[dealer].getDeck()->push(mainDeck->pop(), dealer);
 			return true;
@@ -92,6 +95,7 @@ bool IPC::pickUpOrPass(Player p[4], Deck* mainDeck)
 	}
 	else if (playerResponse == 'y')
 	{
+		trumpCaller = dealer;
 		trumpSuit = mainDeck->topOfMainDeck()->suit;
 		p[dealer].getDeck()->push(mainDeck->pop(), dealer);
 		return true;
@@ -146,18 +150,22 @@ char IPC::pickASuit(Deck* mainDeck)
 			switch (playerResponse)
 			{
 			case 'H':
+				trumpCaller = currentPlayer;
 				trumpSuit = 'H';
 				return trumpSuit;
 				break;
 			case 'D':
+				trumpCaller = currentPlayer;
 				trumpSuit = 'D';
 				return trumpSuit;
 				break;
 			case 'C':
+				trumpCaller = currentPlayer;
 				trumpSuit = 'C';
 				return trumpSuit;
 				break;
 			case 'S':
+				trumpCaller = currentPlayer;
 				trumpSuit = 'S';
 				return trumpSuit;
 				break;
@@ -178,20 +186,23 @@ char IPC::pickASuit(Deck* mainDeck)
 		}
 		switch (playerResponse)
 		{
-			currentPlayer = dealer + 1;
 		case 'H':
+			trumpCaller = dealer;
 			trumpSuit = 'H';
 			return trumpSuit;
 			break;
 		case 'D':
+			trumpCaller = dealer;
 			trumpSuit = 'D';
 			return trumpSuit;
 			break;
 		case 'C':
+			trumpCaller = dealer;
 			trumpSuit = 'C';
 			return trumpSuit;
 			break;
 		case 'S':
+			trumpCaller = dealer;
 			trumpSuit = 'S';
 			return trumpSuit;
 			break;
@@ -228,7 +239,30 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 				std::cout << "Player " << currentPlayer << ", which card would you like to play? (name, suit)";
 				std::cin >> name >> suit;
 				result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
-				firstPlayedSuit = suit;
+
+				if(result == 1)
+				{
+					if(trumpSuit == 'H' && name == "J" && suit == 'D')
+					{
+						firstPlayedSuit = 'H';
+					}
+					else if(trumpSuit == 'D' && name == "J" && suit == 'H')
+					{
+						firstPlayedSuit = 'D';
+					}
+					else if(trumpSuit == 'C' && name == "J" && suit == 'S')
+					{
+						firstPlayedSuit = 'C';
+					}
+					else if(trumpSuit == 'S' && name == "J" && suit == 'C')
+					{
+						firstPlayedSuit = 'S';
+					}
+					else
+					{
+						firstPlayedSuit = suit;
+					}
+				}
 			}
 			std::cout << "==========Pile Deck==========\n";
 			pileDeck->printDeck();
@@ -236,14 +270,34 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 		else
 		{
 			result = -1;
-			playerHasCardOnSuit = p[currentPlayer].getDeck()->searchForFirstPlayedSuit(firstPlayedSuit);
+			playerHasCardOnSuit = p[currentPlayer].getDeck()->searchForFirstPlayedSuit(firstPlayedSuit, trumpSuit);
 			while (result == -1)
 			{
+				// There is one more piece of logic missing here, for example, Hearts is trump, player 1 throws out
+				// a 10 of Diamonds, player 2 has a: J of D, A of H, K of C, K of H, and Q of S. They should not be 
+				// forced to play the J of D, because it is actually treated as a Heart instead so they should be 
+				// able to play any card from their hand
 				std::cout << "Player " << currentPlayer << ", which card would you like to play? (name, suit)";
 				std::cin >> name >> suit;
-				if (playerHasCardOnSuit == 1 && suit != firstPlayedSuit)
+				if(name == "J" && suit == 'H' && firstPlayedSuit == 'D')
 				{
-					std::cout << "You must play a card that follows suit (" << firstPlayedSuit << "): \n";
+					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
+				}
+				else if(name == "J" && suit == 'D' && firstPlayedSuit == 'H')
+				{
+					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
+				}
+				else if(name == "J" && suit == 'C' && firstPlayedSuit == 'S')
+				{
+					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
+				}
+				else if(name == "J" && suit == 'S' && firstPlayedSuit == 'C')
+				{
+					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
+				}
+				else if (playerHasCardOnSuit == 1 && suit != firstPlayedSuit)
+				{
+					std::cout << "You must play a card that follows suit (" << firstPlayedSuit << ")\n";
 					result = -1;
 				}
 				else
@@ -312,5 +366,13 @@ void IPC::setNextDealerAndUpdatePrevious(Player p[4])
 				return;
 			}
 		}
+	}
+}
+
+void IPC::placeCardsBackInMainDeck(Deck* pileDeck, Deck* mainDeck)
+{
+	while(pileDeck->getHead() != NULL)
+	{
+		mainDeck->push(pileDeck->pop());
 	}
 }

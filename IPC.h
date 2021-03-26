@@ -11,6 +11,7 @@ private:
 	int dealer;
 	char trumpSuit;
 	int trickWinner;
+	int trumpCaller;
 public:
 	IPC();
 	IPC(int dlr);
@@ -21,6 +22,7 @@ public:
 	void cardToDiscard(Player p[4], Deck* mainDeck);
 	char pickASuit(Deck* mainDeck);
 	void playersPlaceCardOnPile(Player p[4], Deck* pileDeck);
+	void placeCardsBackInMainDeck(Deck* pileDeck, Deck* mainDeck);
 
 
 	char getTrump();

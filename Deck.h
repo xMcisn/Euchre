@@ -29,7 +29,7 @@ public:
 	int getDeckSize();
 	int searchAndDiscard(char st, std::string nme, Deck* mainDeck);
 	int searchAndPlay(char st, std::string nme, Deck* pileDeck);
-    int searchForFirstPlayedSuit(char firstPlayedSt);
+    int searchForFirstPlayedSuit(char firstPlayedSt, char trumpSt);
 	int determineHighestValueCard(char trumpSuit, char firstPlayedSuit);
 
 	Card* topOfMainDeck()
