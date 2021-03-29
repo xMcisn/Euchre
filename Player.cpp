@@ -6,6 +6,7 @@ Player::Player()
 	numCardsInHand = 0;
 	dealerStatus = false;
 	playerType = "AI";
+	handsWon = 0;
 }
 
 void Player::viewDeck()
@@ -46,4 +47,14 @@ void Player::setPlayerType(std::string newType)
 std::string Player::getPlayerType()
 {
 	return playerType;
+}
+
+void Player::increaseHandsWon()
+{
+	handsWon++;
+}
+
+int Player::getHandsWon()
+{
+	return handsWon;
 }

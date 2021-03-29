@@ -11,6 +11,7 @@ private:
 	Deck playerDeck;
 	bool dealerStatus;
 	std::string playerType;
+	int handsWon;
 public:
 	Player();
 
@@ -25,5 +26,8 @@ public:
 
 	void setPlayerType(std::string newType);
 	std::string getPlayerType();
+
+	void increaseHandsWon();
+	int getHandsWon();
 };
 #endif // !PLAYER_H

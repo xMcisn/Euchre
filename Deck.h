@@ -31,6 +31,8 @@ public:
 	int searchAndPlay(char st, std::string nme, Deck* pileDeck);
     int searchForFirstPlayedSuit(char firstPlayedSt, char trumpSt);
 	int determineHighestValueCard(char trumpSuit, char firstPlayedSuit);
+	int countNumberOfFirstPlayedSuit(char firstPlayedSuit);
+	bool doesPlayerHaveJackOfOtherColor(char trumpSuit);
 
 	Card* topOfMainDeck()
 	{

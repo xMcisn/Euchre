@@ -3,6 +3,7 @@
 #define IPC_H
 
 #include "Player.h"
+#include "Team.h"
 
 class IPC
 {
@@ -12,6 +13,8 @@ private:
 	char trumpSuit;
 	int trickWinner;
 	int trumpCaller;
+	Team t1 = Team(0, 2);
+	Team t2 = Team(1,3);
 public:
 	IPC();
 	IPC(int dlr);

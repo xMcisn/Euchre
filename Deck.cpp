@@ -504,3 +504,59 @@ int Deck::determineHighestValueCard(char trumpSt, char firstPlayedSt)
 		return playerWithHighestCard;
 	}
 }
+
+int Deck::countNumberOfFirstPlayedSuit(char firstPlayedSuit)
+{
+	Card* firstPlayedSuitFinder = head;
+	int numOfFirstPlayed = 0;
+
+	if (head == NULL)
+	{
+		std::cout << "Head is NULL\n";
+		return -1;
+	}
+	else
+	{
+		while (firstPlayedSuitFinder != NULL)
+		{
+			if (firstPlayedSuitFinder->suit == firstPlayedSuit)
+			{
+				numOfFirstPlayed++;
+			}
+			firstPlayedSuitFinder = firstPlayedSuitFinder->next;
+		}
+	}
+	return numOfFirstPlayed;
+}
+
+bool Deck::doesPlayerHaveJackOfOtherColor(char trumpSuit)
+{
+	Card* jackChecker = head;
+
+	if (head == NULL)
+	{
+		std::cout << "Head is NULL\n";
+		return false;
+	}
+	else
+	{
+		while (jackChecker != NULL)
+		{
+			if (jackChecker->name == "J")
+			{
+				if (trumpSuit == 'H' && jackChecker->suit == 'D')
+					return true;
+				else if (trumpSuit == 'D' && jackChecker->suit == 'H')
+					return true;
+				else if (trumpSuit == 'C' && jackChecker->suit == 'S')
+					return true;
+				else if (trumpSuit == 'S' && jackChecker->suit == 'C')
+					return true;
+				else
+					return false;
+			}
+			jackChecker = jackChecker->next;
+		}
+	}
+	return false;
+}

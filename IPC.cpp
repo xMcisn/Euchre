@@ -226,10 +226,12 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 	std::string name;
 	int result = -1;
 	int playerHasCardOnSuit = -1;
+	int howManyFirstPlayed = -1;
+	bool jackOfOtherColorTrump = false;
 
 	for (int i = 0; i < 4; i++)
 	{
-		if(currentPlayer > 3)
+		if (currentPlayer > 3)
 			currentPlayer = 0;
 
 		if (i == 0)
@@ -240,21 +242,21 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 				std::cin >> name >> suit;
 				result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
 
-				if(result == 1)
+				if (result == 1)
 				{
-					if(trumpSuit == 'H' && name == "J" && suit == 'D')
+					if (trumpSuit == 'H' && name == "J" && suit == 'D')
 					{
 						firstPlayedSuit = 'H';
 					}
-					else if(trumpSuit == 'D' && name == "J" && suit == 'H')
+					else if (trumpSuit == 'D' && name == "J" && suit == 'H')
 					{
 						firstPlayedSuit = 'D';
 					}
-					else if(trumpSuit == 'C' && name == "J" && suit == 'S')
+					else if (trumpSuit == 'C' && name == "J" && suit == 'S')
 					{
 						firstPlayedSuit = 'C';
 					}
-					else if(trumpSuit == 'S' && name == "J" && suit == 'C')
+					else if (trumpSuit == 'S' && name == "J" && suit == 'C')
 					{
 						firstPlayedSuit = 'S';
 					}
@@ -270,6 +272,8 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 		else
 		{
 			result = -1;
+			howManyFirstPlayed = p[currentPlayer].getDeck()->countNumberOfFirstPlayedSuit(firstPlayedSuit);
+			jackOfOtherColorTrump = p[currentPlayer].getDeck()->doesPlayerHaveJackOfOtherColor(trumpSuit);
 			playerHasCardOnSuit = p[currentPlayer].getDeck()->searchForFirstPlayedSuit(firstPlayedSuit, trumpSuit);
 			while (result == -1)
 			{
@@ -279,25 +283,34 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 				// able to play any card from their hand
 				std::cout << "Player " << currentPlayer << ", which card would you like to play? (name, suit)";
 				std::cin >> name >> suit;
-				if(name == "J" && suit == 'H' && firstPlayedSuit == 'D')
+				if (name == "J" && suit == 'H' && firstPlayedSuit == 'D')
 				{
 					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
 				}
-				else if(name == "J" && suit == 'D' && firstPlayedSuit == 'H')
+				else if (name == "J" && suit == 'D' && firstPlayedSuit == 'H')
 				{
 					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
 				}
-				else if(name == "J" && suit == 'C' && firstPlayedSuit == 'S')
+				else if (name == "J" && suit == 'C' && firstPlayedSuit == 'S')
 				{
 					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
 				}
-				else if(name == "J" && suit == 'S' && firstPlayedSuit == 'C')
+				else if (name == "J" && suit == 'S' && firstPlayedSuit == 'C')
+				{
+					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
+				}
+				else if (howManyFirstPlayed == 1 && jackOfOtherColorTrump == true)
 				{
 					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
 				}
 				else if (playerHasCardOnSuit == 1 && suit != firstPlayedSuit)
 				{
 					std::cout << "You must play a card that follows suit (" << firstPlayedSuit << ")\n";
+					result = -1;
+				}
+				else if (jackOfOtherColorTrump == true && howManyFirstPlayed == 0)
+				{
+					std::cout << "You must play the jack that follows color (" << firstPlayedSuit << ")\n";
 					result = -1;
 				}
 				else
@@ -315,8 +328,28 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 		currentPlayer++;
 	}
 	trickWinner = pileDeck->determineHighestValueCard(trumpSuit, firstPlayedSuit);
+	p[trickWinner].increaseHandsWon();
 	currentPlayer = trickWinner; // current player should be set to the trick winner instead of the player next to the dealer
 	std::cout << "Trick winner is: " << trickWinner << std::endl;
+
+	/* This code needs to happen when all tricks have been played not when a single
+	* trick has happened, this should also not check trump caller yet we need to have a new
+	* function that counts the number of hands won by each team then determine how many
+	* points they should receive based on that count
+	if ((trumpCaller == t1.getPlayerNum1() || trumpCaller == t1.getPlayerNum2()))
+	{
+		if (trickWinner != t1.getPlayerNum1() || trickWinner != t1.getPlayerNum2())
+		{
+			t2.increaseScore(2);
+		}
+	}
+	else if ((trumpCaller == t2.getPlayerNum1() || trumpCaller == t2.getPlayerNum2()))
+	{
+		if (trickWinner != t2.getPlayerNum1() || trickWinner != t2.getPlayerNum2())
+		{
+			t1.increaseScore(2);
+		}
+	}*/
 }
 
 char IPC::getTrump()
