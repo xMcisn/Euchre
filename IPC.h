@@ -26,7 +26,7 @@ public:
 	char pickASuit(Deck* mainDeck);
 	void playersPlaceCardOnPile(Player p[4], Deck* pileDeck);
 	void placeCardsBackInMainDeck(Deck* pileDeck, Deck* mainDeck);
-
+	void determineWhichTeamWonRoundAndIncreaseScore();
 
 	char getTrump();
 

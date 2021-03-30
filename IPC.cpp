@@ -7,6 +7,7 @@ IPC::IPC()
 	currentPlayer = 1;
 	trumpSuit = 'X';
 	trumpCaller = -1;
+	trickWinner = currentPlayer;
 }
 
 IPC::IPC(int dlr)
@@ -50,9 +51,6 @@ void IPC::displayTopCardInMainDeck(Deck* mainDeck)
 
 bool IPC::pickUpOrPass(Player p[4], Deck* mainDeck)
 {
-	/*Setting current player here is eventually going to fail, need to create a 
-	setter and change current player at the correct time, this is not the correct time*/
-	//currentPlayer = dealer + 1; 
 	char playerResponse;
 
 	if (currentPlayer >= 3)
@@ -114,7 +112,7 @@ void IPC::cardToDiscard(Player p[4], Deck* mainDeck)
 	{
 		std::cout << "Which card would you like to discard? (name, suit)";
 		std::cin >> name >> suit;
-		result = p[dealer].getDeck()->searchAndDiscard(suit, name, mainDeck); //Fixed error
+		result = p[dealer].getDeck()->searchAndDiscard(suit, name, mainDeck);
 	}
 	
 }
@@ -321,36 +319,60 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 			std::cout << "==========Pile Deck==========\n";
 			pileDeck->printDeck();
 		}
-		// player needs to choose a matching suit if they have one otherwise throw down a lower level card off suit
-		//pileDeck->push(p[currentPlayer].getDeck()->pop()); // instead of pop it needs to be 
-		// determine who the current trick winner is by checking card up against the others
-		// 
 		currentPlayer++;
 	}
 	trickWinner = pileDeck->determineHighestValueCard(trumpSuit, firstPlayedSuit);
 	p[trickWinner].increaseHandsWon();
-	currentPlayer = trickWinner; // current player should be set to the trick winner instead of the player next to the dealer
-	std::cout << "Trick winner is: " << trickWinner << std::endl;
-
-	/* This code needs to happen when all tricks have been played not when a single
-	* trick has happened, this should also not check trump caller yet we need to have a new
-	* function that counts the number of hands won by each team then determine how many
-	* points they should receive based on that count
-	if ((trumpCaller == t1.getPlayerNum1() || trumpCaller == t1.getPlayerNum2()))
+	if (trickWinner == t1.getPlayerNum1() || trickWinner == t1.getPlayerNum2())
 	{
-		if (trickWinner != t1.getPlayerNum1() || trickWinner != t1.getPlayerNum2())
+		t1.increaseTrickCountByOne();
+	}
+	else if (trickWinner == t2.getPlayerNum1() || trickWinner == t2.getPlayerNum2())
+	{
+		t2.increaseTrickCountByOne();
+	}
+	currentPlayer = trickWinner;
+	std::cout << "Trick winner is: " << trickWinner << std::endl;
+}
+
+void IPC::determineWhichTeamWonRoundAndIncreaseScore()
+{
+	if (trumpCaller == t1.getPlayerNum1() || trumpCaller == t1.getPlayerNum2())
+	{
+		if (t1.getNumOfTricks() == 3 || t1.getNumOfTricks() == 4)
+		{
+			t1.increaseScore(1);
+		}
+		else if (t1.getNumOfTricks() == 5)
+		{
+			t1.increaseScore(2);
+		}
+		else if (t2.getNumOfTricks() >= 3)
 		{
 			t2.increaseScore(2);
 		}
 	}
-	else if ((trumpCaller == t2.getPlayerNum1() || trumpCaller == t2.getPlayerNum2()))
+	else if(trumpCaller == t2.getPlayerNum1() || trumpCaller == t2.getPlayerNum2())
 	{
-		if (trickWinner != t2.getPlayerNum1() || trickWinner != t2.getPlayerNum2())
+		if (t2.getNumOfTricks() == 3 || t2.getNumOfTricks() == 4)
+		{
+			t2.increaseScore(1);
+		}
+		else if (t2.getNumOfTricks() == 5)
+		{
+			t2.increaseScore(2);
+		}
+		else if (t1.getNumOfTricks() >= 3)
 		{
 			t1.increaseScore(2);
 		}
-	}*/
+	}
+
+	t1.resetTrickCountToZero();
+	t2.resetTrickCountToZero();
 }
+
+
 
 char IPC::getTrump()
 {

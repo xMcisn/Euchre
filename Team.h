@@ -6,6 +6,7 @@ class Team
 {
 private:
 	int score;
+	int totalTricks;
 	int playerNum1;
 	int playerNum2;
 public:
@@ -20,6 +21,11 @@ public:
 
 	int getScore();
 	void increaseScore(int amountToIncreaseBy);
+
+	int getNumOfTricks();
+	void increaseTrickCountByOne();
+	void resetTrickCountToZero();
+
 };
 
 #endif
