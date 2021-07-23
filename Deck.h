@@ -1,6 +1,6 @@
 #pragma once
-#ifndef EUCHRE_H
-#define EUCHRE_H
+#ifndef DECK_H
+#define DECK_H
 
 #include <string>
 
@@ -36,6 +36,10 @@ public:
 
 	Card* topOfMainDeck()
 	{
+		if(head == NULL)
+		{
+			exit(0);
+		}
 		Card* temp = head;
 		return temp;
 	}
@@ -45,9 +49,7 @@ public:
 		Card* tempHead = head;
 
 		if (head == NULL)
-		{
 			return NULL;
-		}
 		else
 		{
 			head = head->next;
@@ -91,8 +93,9 @@ public:
 
 	Card* getHead()
 	{
-		return head;
+		if(head != NULL)
+			return head;
 	}
 };
 
-#endif // !"EUCHRE.H"
+#endif // !"DECK.H"

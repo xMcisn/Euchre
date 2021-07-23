@@ -264,8 +264,6 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 					}
 				}
 			}
-			std::cout << "==========Pile Deck==========\n";
-			pileDeck->printDeck();
 		}
 		else
 		{
@@ -316,9 +314,9 @@ void IPC::playersPlaceCardOnPile(Player p[4], Deck* pileDeck)
 					result = p[currentPlayer].getDeck()->searchAndPlay(suit, name, pileDeck);
 				}
 			}
-			std::cout << "==========Pile Deck==========\n";
-			pileDeck->printDeck();
 		}
+		std::cout << "==========Pile Deck==========\n";
+		pileDeck->printDeck();
 		currentPlayer++;
 	}
 	trickWinner = pileDeck->determineHighestValueCard(trumpSuit, firstPlayedSuit);
@@ -372,13 +370,16 @@ void IPC::determineWhichTeamWonRoundAndIncreaseScore()
 	t2.resetTrickCountToZero();
 }
 
-
+void IPC::displayTeamScores()
+{
+	std::cout << "Team 1 score: " << t1.getScore() << std::endl;
+	std::cout << "Team 2 score: " << t2.getScore() << std::endl;
+}
 
 char IPC::getTrump()
 {
 	return trumpSuit;
 }
-
 
 void IPC::setCurrentPlayer(int curPlyer)
 {

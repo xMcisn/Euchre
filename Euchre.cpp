@@ -68,9 +68,11 @@ int main()
 		displayAllPlayersCards(players);
 		communicator.placeCardsBackInMainDeck(&pileDeck, &myEuchreDeck);
 	}
+	communicator.determineWhichTeamWonRoundAndIncreaseScore();
 	communicator.setNextDealerAndUpdatePrevious(players);
 	std::cout << "----------Main Deck----------\n";
 	myEuchreDeck.printDeck();
+	communicator.displayTeamScores();
 
 	return 0;
 }

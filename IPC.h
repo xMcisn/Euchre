@@ -27,6 +27,7 @@ public:
 	void playersPlaceCardOnPile(Player p[4], Deck* pileDeck);
 	void placeCardsBackInMainDeck(Deck* pileDeck, Deck* mainDeck);
 	void determineWhichTeamWonRoundAndIncreaseScore();
+	void displayTeamScores();
 
 	char getTrump();
 
